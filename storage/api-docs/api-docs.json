@@ -1,0 +1,2937 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "My API Documentation",
+        "description": "This is the API documentation for your Laravel project.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost/www/public",
+            "description": "API Server"
+        }
+    ],
+    "paths": {
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login user and create token",
+                "description": "Authenticate user and return access token",
+                "operationId": "a3b306d14572d1f4bd6c064b3233e7b8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "secret123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful login",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Login successful"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "1|abcdefghijk1234567890"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid credentials"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Register a new user",
+                "description": "Creates a new user and assigns a role (default is User)",
+                "operationId": "8a56853624e025573120a09a4c75d468",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "full_name",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "full_name": {
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john@example.com"
+                                    },
+                                    "mobile": {
+                                        "type": "string",
+                                        "maxLength": 20,
+                                        "example": "+1234567890"
+                                    },
+                                    "sex": {
+                                        "type": "string",
+                                        "enum": [
+                                            "male",
+                                            "female",
+                                            "other"
+                                        ],
+                                        "example": "male"
+                                    },
+                                    "age": {
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "example": 28
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "minLength": 6,
+                                        "example": "secret123"
+                                    },
+                                    "role_id": {
+                                        "description": "Optional, defaults to User",
+                                        "type": "integer",
+                                        "example": 4
+                                    },
+                                    "institute_id": {
+                                        "description": "Optional",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "describtion": {
+                                        "type": "string",
+                                        "example": "Bio or other notes"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User registered successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User registered successfully"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "1|abcdefghijk1234567890"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Logout user",
+                "description": "Revoke current access token",
+                "operationId": "fe8f3429cd6979b3b4517e186505f9f9",
+                "responses": {
+                    "200": {
+                        "description": "Successfully logged out",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Logged out successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/refresh-token": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Refresh access token",
+                "description": "Revokes the current token and provides a new token to the user.",
+                "operationId": "833684aa6f123680767976945e7c783c",
+                "responses": {
+                    "200": {
+                        "description": "Token refreshed successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Token refreshed successfully"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "1|abcdefghijk1234567890"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/exams": {
+            "get": {
+                "tags": [
+                    "Exams"
+                ],
+                "summary": "List all exams",
+                "operationId": "a54e05ebd2b23c9f2329a2a483272bc3",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Exam"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Exams"
+                ],
+                "summary": "Create an exam",
+                "operationId": "fa2de658c3313746441306155597563e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "question_count",
+                                    "duration_minutes"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "New Final Exam"
+                                    },
+                                    "question_count": {
+                                        "type": "integer",
+                                        "example": 60
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 49.99
+                                    },
+                                    "link": {
+                                        "type": "string",
+                                        "example": "https://example.com/exam/page",
+                                        "nullable": true
+                                    },
+                                    "duration_minutes": {
+                                        "type": "integer",
+                                        "example": 50
+                                    },
+                                    "discount_percent": {
+                                        "type": "number",
+                                        "example": 5,
+                                        "nullable": true
+                                    },
+                                    "quiz_type": {
+                                        "type": "string",
+                                        "example": "single-choice",
+                                        "nullable": true
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Science summer assessment",
+                                        "nullable": true
+                                    },
+                                    "image_url": {
+                                        "type": "string",
+                                        "example": "https://example.com/exam.jpg",
+                                        "nullable": true
+                                    },
+                                    "describtion": {
+                                        "type": "string",
+                                        "example": "For eligible students only",
+                                        "nullable": true
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Exam created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Exam"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/exams/{id}": {
+            "get": {
+                "tags": [
+                    "Exams"
+                ],
+                "summary": "Get an exam by ID",
+                "operationId": "5762ee3221f12d62693826bab5e66e2a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Exam"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Exam not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Exams"
+                ],
+                "summary": "Update an exam",
+                "operationId": "d8b5e491c38a96d9bd5f9787cff42ab1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Updated Exam"
+                                    },
+                                    "question_count": {
+                                        "type": "integer",
+                                        "example": 100
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 70.5
+                                    },
+                                    "link": {
+                                        "type": "string",
+                                        "example": "https://example.com/new-link"
+                                    },
+                                    "duration_minutes": {
+                                        "type": "integer",
+                                        "example": 80
+                                    },
+                                    "discount_percent": {
+                                        "type": "number",
+                                        "example": 0
+                                    },
+                                    "quiz_type": {
+                                        "type": "string",
+                                        "example": "essay"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Updated description"
+                                    },
+                                    "image_url": {
+                                        "type": "string",
+                                        "example": "https://example.com/updated.jpg"
+                                    },
+                                    "describtion": {
+                                        "type": "string",
+                                        "example": "Some staff update note"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "example": false
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Exam updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Exam"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Exam not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Exams"
+                ],
+                "summary": "Delete an exam",
+                "operationId": "61fff9ddd42647f37ba3b48f3c0ac233",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Exam deleted"
+                    },
+                    "404": {
+                        "description": "Exam not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/exam-results": {
+            "get": {
+                "tags": [
+                    "ExamResults"
+                ],
+                "summary": "List all exam results",
+                "operationId": "cef213570cab27d189a06ca0f8a7f9f0",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ExamResult"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "ExamResults"
+                ],
+                "summary": "Create an exam result",
+                "operationId": "124e4e53544154f686050d75262c4658",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id",
+                                    "exam_id",
+                                    "result_html"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "exam_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "result_html": {
+                                        "type": "string",
+                                        "example": "<p>Score: 10/10</p>"
+                                    },
+                                    "descriptionShort": {
+                                        "type": "string",
+                                        "example": "Passed"
+                                    },
+                                    "descriptionLong": {
+                                        "type": "string",
+                                        "example": "Excellent result"
+                                    },
+                                    "expert_comment": {
+                                        "type": "string",
+                                        "example": "Great performance!"
+                                    },
+                                    "describtion": {
+                                        "type": "string",
+                                        "example": "Staff feedback or meta"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Exam result created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ExamResult"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/exam-results/{id}": {
+            "get": {
+                "tags": [
+                    "ExamResults"
+                ],
+                "summary": "Get an exam result by ID",
+                "operationId": "311415169521e5cb852b46f4f7473355",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ExamResult"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Exam result not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "ExamResults"
+                ],
+                "summary": "Update an exam result",
+                "operationId": "db835c96a26e40f7ca54009a5b48bf0b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "result_html": {
+                                        "type": "string",
+                                        "example": "<p>Updated Score: 10/10</p>"
+                                    },
+                                    "descriptionShort": {
+                                        "type": "string",
+                                        "example": "Retaken and Passed"
+                                    },
+                                    "descriptionLong": {
+                                        "type": "string",
+                                        "example": "Improved performance"
+                                    },
+                                    "expert_comment": {
+                                        "type": "string",
+                                        "example": "Much better!"
+                                    },
+                                    "describtion": {
+                                        "type": "string",
+                                        "example": "Admin change note"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "example": false
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Exam result updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ExamResult"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Exam result not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "ExamResults"
+                ],
+                "summary": "Delete an exam result",
+                "operationId": "a77a0970d9f672530b4e6fd4ea8fe5c1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Exam result deleted"
+                    },
+                    "404": {
+                        "description": "Exam result not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/institutes": {
+            "get": {
+                "tags": [
+                    "Institute"
+                ],
+                "summary": "List all institutes",
+                "operationId": "a5179f82501941d37f88d0eca6abc79e",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Institute"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Institute"
+                ],
+                "summary": "Create a new institute",
+                "operationId": "d8400443b294181191b8817768bd0689",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "username",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Green Academy"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "123 Main St"
+                                    },
+                                    "logo_url": {
+                                        "type": "string",
+                                        "example": "https://example.com/logo.png"
+                                    },
+                                    "start_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-01-01"
+                                    },
+                                    "end_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2026-01-01"
+                                    },
+                                    "mobile": {
+                                        "type": "string",
+                                        "example": "09112223344"
+                                    },
+                                    "username": {
+                                        "type": "string",
+                                        "example": "greenacademy"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "secret123"
+                                    },
+                                    "describtion": {
+                                        "type": "string",
+                                        "example": "Institute notes"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Institute created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Institute"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/institutes/{id}": {
+            "get": {
+                "tags": [
+                    "Institute"
+                ],
+                "summary": "Get an institute by id",
+                "operationId": "1ad944a30ab180fab2db4ff0f36c5926",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Institute"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Institute not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Institute"
+                ],
+                "summary": "Update an institute",
+                "operationId": "879ba54325608aba9cf95d41b81bbd4d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "type": "string"
+                                    },
+                                    "logo_url": {
+                                        "type": "string"
+                                    },
+                                    "start_date": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "end_date": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "mobile": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "describtion": {
+                                        "type": "string"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Institute updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Institute"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Institute not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Institute"
+                ],
+                "summary": "Delete an institute",
+                "operationId": "8a68dae7abbadd690cddb1b7c625958e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Institute deleted"
+                    },
+                    "404": {
+                        "description": "Institute not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/institute-exams": {
+            "get": {
+                "tags": [
+                    "InstituteExams"
+                ],
+                "summary": "List all institute-exam assignments",
+                "operationId": "859a6f5360f0d89dd2677af63476e98b",
+                "responses": {
+                    "200": {
+                        "description": "A list of InstituteExam",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/InstituteExam"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "InstituteExams"
+                ],
+                "summary": "Create a new institute-exam assignment",
+                "operationId": "4af38283a039cb20b36aa4b9c06c8e83",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "institute_id",
+                                    "exam_id"
+                                ],
+                                "properties": {
+                                    "institute_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "exam_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "assigned_at": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2025-08-06T12:00:00Z"
+                                    },
+                                    "describtion": {
+                                        "type": "string",
+                                        "example": "For Summer 2025"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "InstituteExam created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InstituteExam"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/institute-exams/{id}": {
+            "get": {
+                "tags": [
+                    "InstituteExams"
+                ],
+                "summary": "Get one institute-exam assignment",
+                "operationId": "c6c2a4754a248058c891c6ab18db1e4b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "InstituteExam found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InstituteExam"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "InstituteExams"
+                ],
+                "summary": "Update an institute-exam assignment",
+                "operationId": "8712a6a6dfe066cc4f8956768c629552",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "assigned_at": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    },
+                                    "describtion": {
+                                        "type": "string"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "InstituteExam updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InstituteExam"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "InstituteExams"
+                ],
+                "summary": "Delete an institute-exam assignment",
+                "operationId": "6ed06aac9fff4c072ee863d729902839",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "InstituteExam deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "InstituteExam deleted"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/roles": {
+            "get": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Get all roles",
+                "operationId": "77e3636d8592997ce9d6d27b50857a69",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Role"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Create a new role",
+                "operationId": "4a563842fbfcad237f63da43065fca3d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Admin"
+                                    },
+                                    "describtion": {
+                                        "type": "string",
+                                        "example": "Administrator role"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Role created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Role"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/roles/{id}": {
+            "get": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Get a single role",
+                "operationId": "7fb0667a295b7678a30353aa11739683",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Role ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Role"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Role not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Update an existing role",
+                "operationId": "786d6990093a8eb3a56931f19a827e43",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Role ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Moderator"
+                                    },
+                                    "describtion": {
+                                        "type": "string",
+                                        "example": "Limited management"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "example": false
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Role updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Role"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Delete a role",
+                "operationId": "8285c46981c60ad600aa4077307aec04",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Role ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Role deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Role deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Role not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "List all users",
+                "operationId": "c457726701591d1183b53aa71fc13441",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Register a new user",
+                "description": "Creates a new user and assigns a role (default is User).",
+                "operationId": "592819a0265360b2014512d6dbfaf0e7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "full_name",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "full_name": {
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john@example.com"
+                                    },
+                                    "mobile": {
+                                        "type": "string",
+                                        "maxLength": 20,
+                                        "example": "+1234567890"
+                                    },
+                                    "sex": {
+                                        "type": "string",
+                                        "enum": [
+                                            "male",
+                                            "female",
+                                            "other"
+                                        ],
+                                        "example": "male"
+                                    },
+                                    "age": {
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "example": 28
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "minLength": 6,
+                                        "example": "secret123"
+                                    },
+                                    "role_id": {
+                                        "description": "Optional, defaults to User",
+                                        "type": "integer",
+                                        "example": 4
+                                    },
+                                    "institute_id": {
+                                        "description": "Optional",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "describtion": {
+                                        "description": "Bio or extra note",
+                                        "type": "string",
+                                        "example": "Frontend developer"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User registered successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User registered successfully"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/users/{id}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get user by ID",
+                "operationId": "36a33ff774d5cba33c039dec2c3e0287",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update user",
+                "operationId": "b9091397c8b25f12c6adb74be6ce3a5a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "full_name": {
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "John Updated"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john_new@example.com"
+                                    },
+                                    "mobile": {
+                                        "type": "string",
+                                        "maxLength": 20,
+                                        "example": "+987654321"
+                                    },
+                                    "sex": {
+                                        "type": "string",
+                                        "enum": [
+                                            "male",
+                                            "female",
+                                            "other"
+                                        ],
+                                        "example": "other"
+                                    },
+                                    "age": {
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "example": 30
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "minLength": 6,
+                                        "example": "updated123"
+                                    },
+                                    "role_id": {
+                                        "description": "Optional",
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "institute_id": {
+                                        "description": "Optional",
+                                        "type": "integer",
+                                        "example": 3
+                                    },
+                                    "describtion": {
+                                        "description": "Bio or extra note",
+                                        "type": "string",
+                                        "example": "React & Nextjs expert"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "example": false
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Delete user",
+                "operationId": "fa56cffde745d3f152f95cbacd936c0b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "User deleted successfully"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/user-exams": {
+            "get": {
+                "tags": [
+                    "UserExams"
+                ],
+                "summary": "List all user exams",
+                "operationId": "6b7061977234f6e4245cbf83b2113fcd",
+                "responses": {
+                    "200": {
+                        "description": "List of user exams",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/UserExam"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "UserExams"
+                ],
+                "summary": "Create a user exam",
+                "operationId": "292108556f90a48f3e2ccb8e484232a5",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id",
+                                    "exam_id"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "exam_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "started_at": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2025-08-06T10:00:00Z"
+                                    },
+                                    "finished_at": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2025-08-06T11:30:00Z"
+                                    },
+                                    "total_time_seconds": {
+                                        "type": "integer",
+                                        "example": 4500
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "example": "started"
+                                    },
+                                    "answers": {
+                                        "type": "string",
+                                        "example": "Answers in JSON format"
+                                    },
+                                    "describtion": {
+                                        "type": "string",
+                                        "example": "Initial attempt"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User exam created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserExam"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/user-exams/{id}": {
+            "get": {
+                "tags": [
+                    "UserExams"
+                ],
+                "summary": "Show a user exam",
+                "operationId": "0db418257a3b442391fa8807b6d1e5aa",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User exam found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserExam"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "UserExams"
+                ],
+                "summary": "Update a user exam",
+                "operationId": "31cf891b531278d92bd86ba179835121",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "started_at": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    },
+                                    "finished_at": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    },
+                                    "total_time_seconds": {
+                                        "type": "integer"
+                                    },
+                                    "status": {
+                                        "type": "string"
+                                    },
+                                    "answers": {
+                                        "type": "string",
+                                        "example": "Answers in JSON format"
+                                    },
+                                    "describtion": {
+                                        "type": "string"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User exam updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserExam"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "UserExams"
+                ],
+                "summary": "Delete a user exam",
+                "operationId": "502c4c730c4fe7c6c9cd2374ec9dd6c5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User exam deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "UserExam deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/lessons": {
+            "get": {
+                "tags": [
+                    "Lessons"
+                ],
+                "summary": "Get list of lessons",
+                "description": "Returns list of all lessons",
+                "operationId": "getLessonsList",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "لیست دروس با موفقیت دریافت شد"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Lesson"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Lessons"
+                ],
+                "summary": "Create a new lesson",
+                "description": "Store a newly created lesson in storage",
+                "operationId": "storeLesson",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "description"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "درس جدید"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "توضیحات درس جدید"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Lesson created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "درس با موفقیت ایجاد شد"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Lesson"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        },
+        "/api/lessons/{id}": {
+            "get": {
+                "tags": [
+                    "Lessons"
+                ],
+                "summary": "Get lesson information",
+                "description": "Returns lesson data",
+                "operationId": "getLessonById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Lesson id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "جزئیات درس با موفقیت دریافت شد"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Lesson"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Lesson not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Lessons"
+                ],
+                "summary": "Update existing lesson",
+                "description": "Returns updated lesson data",
+                "operationId": "updateLesson",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Lesson id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "description"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "درس به‌روزرسانی شده"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "توضیحات به‌روزرسانی شده"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "درس با موفقیت به‌روزرسانی شد"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Lesson"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Lesson not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Lessons"
+                ],
+                "summary": "Delete existing lesson",
+                "description": "Deletes a record and returns no content",
+                "operationId": "deleteLesson",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Lesson id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "درس با موفقیت حذف شد"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Lesson not found"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Exam": {
+                "required": [
+                    "title",
+                    "question_count",
+                    "duration_minutes"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Mathematics Entrance Test"
+                    },
+                    "question_count": {
+                        "type": "integer",
+                        "example": 50
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 99.5,
+                        "nullable": true
+                    },
+                    "link": {
+                        "type": "string",
+                        "example": "https://example.com/exam/1",
+                        "nullable": true
+                    },
+                    "duration_minutes": {
+                        "type": "integer",
+                        "example": 120
+                    },
+                    "discount_percent": {
+                        "type": "number",
+                        "example": 15,
+                        "nullable": true
+                    },
+                    "quiz_type": {
+                        "type": "string",
+                        "example": "multiple-choice",
+                        "nullable": true
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Annual entrance exam",
+                        "nullable": true
+                    },
+                    "image_url": {
+                        "type": "string",
+                        "example": "https://example.com/q.jpg",
+                        "nullable": true
+                    },
+                    "describtion": {
+                        "type": "string",
+                        "example": "Extra exam note",
+                        "nullable": true
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "ExamResult": {
+                "required": [
+                    "user_id",
+                    "exam_id",
+                    "result_html"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 12
+                    },
+                    "exam_id": {
+                        "type": "integer",
+                        "example": 9
+                    },
+                    "result_html": {
+                        "type": "string",
+                        "example": "<p>Score: 8/10</p>"
+                    },
+                    "descriptionShort": {
+                        "type": "string",
+                        "example": "Passed",
+                        "nullable": true
+                    },
+                    "descriptionLong": {
+                        "type": "string",
+                        "example": "Excellent performance",
+                        "nullable": true
+                    },
+                    "expert_comment": {
+                        "type": "string",
+                        "example": "Keep up the good work!",
+                        "nullable": true
+                    },
+                    "describtion": {
+                        "type": "string",
+                        "example": "Internal note",
+                        "nullable": true
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "Institute": {
+                "required": [
+                    "name",
+                    "username",
+                    "password"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Green Academy"
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "123 Main St",
+                        "nullable": true
+                    },
+                    "logo_url": {
+                        "type": "string",
+                        "example": "https://example.com/logo.png",
+                        "nullable": true
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-01-01",
+                        "nullable": true
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2026-01-01",
+                        "nullable": true
+                    },
+                    "mobile": {
+                        "type": "string",
+                        "example": "09112223344",
+                        "nullable": true
+                    },
+                    "username": {
+                        "type": "string",
+                        "example": "greenacademy"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "hashedpw"
+                    },
+                    "describtion": {
+                        "type": "string",
+                        "example": "Another note or meta for internal use",
+                        "nullable": true
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "InstituteExam": {
+                "required": [
+                    "institute_id",
+                    "exam_id"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "institute_id": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "exam_id": {
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "assigned_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-08-06T12:00:00Z"
+                    },
+                    "describtion": {
+                        "type": "string",
+                        "example": "Math 101 assignment"
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "Lesson": {
+                "required": [
+                    "title",
+                    "description"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "درس ریاضی"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "این درس در مورد جبر و هندسه است"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "Role": {
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Admin"
+                    },
+                    "describtion": {
+                        "type": "string",
+                        "example": "Role with full access",
+                        "nullable": true
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-08-05T08:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-08-05T08:00:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "required": [
+                    "full_name",
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "full_name": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "john@example.com"
+                    },
+                    "mobile": {
+                        "type": "string",
+                        "example": "+1234567890",
+                        "nullable": true
+                    },
+                    "sex": {
+                        "type": "string",
+                        "enum": [
+                            "male",
+                            "female",
+                            "other"
+                        ],
+                        "example": "male",
+                        "nullable": true
+                    },
+                    "age": {
+                        "type": "integer",
+                        "example": 28,
+                        "nullable": true
+                    },
+                    "role_id": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "institute_id": {
+                        "type": "integer",
+                        "example": 1,
+                        "nullable": true
+                    },
+                    "describtion": {
+                        "type": "string",
+                        "example": "Frontend developer",
+                        "nullable": true
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "UserExam": {
+                "required": [
+                    "user_id",
+                    "exam_id"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 12
+                    },
+                    "exam_id": {
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "started_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-08-06T10:00:00Z"
+                    },
+                    "finished_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-08-06T11:30:00Z"
+                    },
+                    "total_time_seconds": {
+                        "type": "integer",
+                        "example": 5400
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "completed"
+                    },
+                    "answers": {
+                        "type": "string",
+                        "example": "Answers in JSON format"
+                    },
+                    "describtion": {
+                        "type": "string",
+                        "example": "First attempt"
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "sanctum": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        },
+        {
+            "name": "Exams",
+            "description": "Exams"
+        },
+        {
+            "name": "ExamResults",
+            "description": "ExamResults"
+        },
+        {
+            "name": "Institute",
+            "description": "Institute"
+        },
+        {
+            "name": "InstituteExams",
+            "description": "InstituteExams"
+        },
+        {
+            "name": "Lessons",
+            "description": "Lessons"
+        },
+        {
+            "name": "Roles",
+            "description": "Roles"
+        },
+        {
+            "name": "Users",
+            "description": "Users"
+        },
+        {
+            "name": "UserExams",
+            "description": "UserExams"
+        }
+    ]
+}
