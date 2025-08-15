@@ -318,7 +318,6 @@ class UserController extends Controller
                 'email.unique' => 'این ایمیل قبلاً ثبت شده است',
                 'password.required' => 'رمز عبور الزامی است',
                 'password.min' => 'رمز عبور باید حداقل 8 کاراکتر باشد',
-                'password.confirmed' => 'تأیید رمز عبور مطابقت ندارد',
                 'mobile.regex' => 'فرمت شماره موبایل صحیح نیست',
                 'age.min' => 'سن باید حداقل 1 سال باشد',
                 'age.max' => 'سن باید حداکثر 120 سال باشد',

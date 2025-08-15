@@ -24,11 +24,6 @@ Route::post('/login', [AuthController::class, 'login']);
 // ===============================
 
 Route::middleware(['api'])->group(function () {
-    // User routes
-    Route::get('/user', [UserController::class, 'profile']);
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/refresh-token', [AuthController::class, 'refreshToken']);
-    
     // Users CRUD
     Route::apiResource('users', UserController::class);
     Route::patch('/users/{id}/toggle-status', [UserController::class, 'toggleStatus']);
@@ -41,6 +36,17 @@ Route::middleware(['api'])->group(function () {
     Route::apiResource('user-exams', \App\Http\Controllers\UserExamController::class);
     Route::apiResource('institute-exams', \App\Http\Controllers\InstituteExamController::class);
     Route::apiResource('institutes', \App\Http\Controllers\InstituteController::class);
+});
+
+// ===============================
+// Protected Routes (Auth Required)
+// ===============================
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    // User profile and logout
+    Route::get('/user', [UserController::class, 'profile']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/refresh-token', [AuthController::class, 'refreshToken']);
 });
 
 // Fallback

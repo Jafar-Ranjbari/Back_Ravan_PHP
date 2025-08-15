@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -22,17 +23,15 @@ return new class extends Migration
             }
         });
         
-        // Step 2: Rename column if exists
+        // Step 2: Rename column using raw SQL for MariaDB compatibility
         if (Schema::hasColumn('users', 'describtion')) {
-            Schema::table('users', function (Blueprint $table) {
-                $table->renameColumn('describtion', 'description');
-            });
+            DB::statement('ALTER TABLE users CHANGE describtion description TEXT NULL');
         }
         
-        // Step 3: Modify columns after rename
+        // Step 3: Modify other columns
         Schema::table('users', function (Blueprint $table) {
             $table->string('mobile', 20)->nullable()->change();
-            $table->tinyInteger('age')->unsigned()->nullable()->change();
+            $table->smallInteger('age')->unsigned()->nullable()->change();
             $table->boolean('is_active')->default(true)->change();
             
             // Only modify description if it exists now
@@ -51,7 +50,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             // Revert column changes
             $table->string('mobile')->nullable()->change();
-            $table->integer('age')->nullable()->change();
+            $table->smallInteger('age')->nullable()->change();
             $table->boolean('is_active')->nullable()->change();
             
             if (Schema::hasColumn('users', 'description')) {
@@ -59,11 +58,9 @@ return new class extends Migration
             }
         });
         
-        // Rename back
+        // Rename back using raw SQL
         if (Schema::hasColumn('users', 'description')) {
-            Schema::table('users', function (Blueprint $table) {
-                $table->renameColumn('description', 'describtion');
-            });
+            DB::statement('ALTER TABLE users CHANGE description describtion TEXT NULL');
         }
         
         // Remove added columns
