@@ -15,15 +15,23 @@ return new class extends Migration
             $table->id();
             $table->string('full_name');
             $table->string('email')->unique();
-            $table->string('mobile')->nullable();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('mobile', 20)->nullable();
             $table->enum('sex', ['male', 'female', 'other'])->nullable();
-            $table->integer('age')->nullable();
+            $table->tinyInteger('age')->unsigned()->nullable();
             $table->string('password');
-            $table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
-            $table->foreignId('institute_id')->nullable()->constrained('institutes')->onDelete('set null');
-            $table->string('describtion')->nullable();
-            $table->boolean('is_active')->nullable();
+            $table->unsignedBigInteger('role_id')->nullable();
+            $table->unsignedBigInteger('institute_id')->nullable();
+            $table->text('description')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->rememberToken();
             $table->timestamps();
+            
+            // Add indexes for better performance
+            $table->index('email');
+            $table->index('role_id');
+            $table->index('institute_id');
+            $table->index('is_active');
         });
     }
 
